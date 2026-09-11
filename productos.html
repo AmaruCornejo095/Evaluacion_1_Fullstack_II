@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Productos - Mi Tienda</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<header>
+    <div class="logo">MiTienda</div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="productos.html">Productos</a>
+        <a href="nosotros.html">Nosotros</a>
+        <a href="blogs.html">Blogs</a>
+        <a href="contacto.html">Contacto</a>
+    </nav>
+
+    <div class="header-right">
+        <a href="login.html" class="nav-auth">Iniciar Sesión</a>
+        <a href="registro.html" class="nav-auth">Registrarse</a>
+        <a href="carrito.html" class="cart-link">🛒 Cart (<span id="cant-carrito">0</span>)</a>
+    </div>
+</header>
+
+<main class="container">
+    <h2 class="titulo-seccion">NUESTROS PRODUCTOS</h2>
+    <div class="grid-cards" id="contenedor-catalogo">
+        <!-- Carga de lista de productos por JavaScript -->
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2026 MiTienda - Evaluación Parcial DSY1104</p>
+</footer>
+
+<script src="js/datos.js"></script>
+<script src="js/app.js"></script>
+<script src="js/productos.js"></script>
+
+</body>
+</html>
