@@ -8,6 +8,9 @@
 body {
     background-color: #f8f9fa;
     color: #333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 header {
@@ -17,12 +20,20 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .logo {
     font-size: 1.5rem;
     font-weight: bold;
     color: white;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 nav a, .nav-auth {
@@ -38,19 +49,23 @@ nav a:hover, .nav-auth:hover {
 .header-right {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 15px;
 }
 
-.cart-link {
+.cart-link, .cart-icon {
     background-color: #0284c7;
     padding: 6px 12px;
     border-radius: 4px;
     color: white;
     text-decoration: none;
+    white-space: nowrap;
 }
 
 .container {
     max-width: 1100px;
+    width: 100%;
+    flex: 1;
     margin: 2rem auto;
     padding: 20px;
     background-color: white;
@@ -61,12 +76,15 @@ nav a:hover, .nav-auth:hover {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: 20px;
     padding-bottom: 20px;
     border-bottom: 1px solid #e2e8f0;
 }
 
 .hero-content {
+    flex: 1;
+    min-width: 260px;
     max-width: 55%;
 }
 
@@ -75,7 +93,13 @@ nav a:hover, .nav-auth:hover {
     margin-bottom: 10px;
 }
 
+.hero-image {
+    flex: 1;
+    min-width: 260px;
+}
+
 .hero-image img {
+    width: 100%;
     max-width: 100%;
     border-radius: 6px;
 }
@@ -96,14 +120,19 @@ nav a:hover, .nav-auth:hover {
 }
 
 footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
     text-align: center;
-    padding: 1.5rem;
+    padding: 1.5rem 1rem;
     background-color: #1e293b;
     color: white;
-    margin-top: 3rem;
+    margin-top: auto;
+    font-size: clamp(0.8rem, 2.5vw, 1rem);
 }
 
-/* Productos: 4 columnas x n filas */
 .destacados-section {
     margin-top: 20px;
 }
@@ -152,12 +181,59 @@ footer {
 }
 
 @media (max-width: 800px) {
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    nav {
+        justify-content: center;
+    }
+
+    .header-right {
+        justify-content: center;
+    }
+
+    .container {
+        width: auto;
+        margin: 1rem;
+    }
+
+    .hero-section {
+        flex-direction: column;
+    }
+
+    .hero-content {
+        max-width: 100%;
+    }
+
     .grid-cards {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 500px) {
+    header {
+        padding: 1rem;
+    }
+
+    nav a, .nav-auth {
+        margin: 5px;
+        font-size: 0.9rem;
+    }
+
+    .container {
+        padding: 15px;
+    }
+
+    .hero-content h1 {
+        font-size: 1.5rem;
+    }
+
+    footer {
+        padding: 1rem;
+    }
+
     .grid-cards {
         grid-template-columns: 1fr;
     }
