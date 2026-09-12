@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contacto - Mi Tienda</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <header>
+    <div class="logo">MiTienda</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="productos.html">Productos</a>
+      <a href="contacto.html">Contacto</a>
+      <a href="login.html">Iniciar Sesión</a>
+      <a href="registro.html">Registrarse</a>
+    </nav>
+    <a href="carrito.html" class="cart-icon">🛒 Carrito (<span id="cant-carrito">0</span>)</a>
+  </header>
+  <main class="container">
+    <h2>Formulario de Contacto</h2>
+    <p>Envíanos tus dudas o comentarios y te responderemos a la brevedad.</p>
+    <br>
+
+    <form id="formContacto" onsubmit="validarContacto(event)" novalidate>
+      
+  
+      <div class="form-group">
+        <label for="nombre">Nombre Completo *</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Ej: Juan Pérez">
+        <span id="errorNombre" class="error-message"></span>
+      </div>
+
+    
+      <div class="form-group">
+        <label for="correo">Correo Electrónico</label>
+        <input type="email" id="correo" name="correo" placeholder="ejemplo@duoc.cl">
+        <span id="errorCorreo" class="error-message"></span>
+      </div>
+
+    
+      <div class="form-group">
+        <label for="comentario">Comentario / Mensaje *</label>
+        <textarea id="comentario" name="comentario" rows="5" placeholder="Escribe tu mensaje aquí (máx 500 caracteres)..."></textarea>
+        <span id="errorComentario" class="error-message"></span>
+      </div>
+
+
+      <button type="submit" class="btn">Enviar Mensaje</button>
+    </form>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 MiTienda - Evaluación Parcial 1</p>
+  </footer>
+  ``
+  <script src="js/productos.js"></script>
+  <script src="js/validaciones.js"></script>
+</body>
+</html>
