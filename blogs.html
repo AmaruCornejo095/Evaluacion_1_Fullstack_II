@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blogs y Noticias - LogiStock</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+  <!-- BARRA DE NAVEGACIÓN PRINCIPAL -->
+  <header>
+    <div class="logo">LogiStock</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="productos.html">Productos</a>
+      <a href="nosotros.html">Nosotros</a>
+      <a href="blogs.html">Blogs</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
+
+    <div class="header-right">
+      <a href="login.html" class="nav-auth">Iniciar Sesión</a>
+      <a href="registro.html" class="nav-auth">Registrarse</a>
+      <a href="carrito.html" class="cart-link">🛒 Cart (<span id="cant-carrito">0</span>)</a>
+    </div>
+  </header>
+
+  <!-- CONTENIDO SECCIÓN BLOGS -->
+  <main class="container">
+    <h2 style="text-align: center; margin-bottom: 25px;">NOTICIAS IMPORTANTES</h2>
+
+    <!-- CASO CURIOSO #1 -->
+    <section class="hero-section" style="margin-bottom: 30px;">
+      <div class="hero-content">
+        <h2>CASO CURIOSO #1</h2>
+        <p style="margin: 15px 0; line-height: 1.5;">
+          Optimización de Bodegas: Descubre cómo los conteos cíclicos automatizados logran reducir las discrepancias en el inventario físico hasta en un 95%.
+        </p>
+        <a href="detalle-blog1.html" class="btn-secundario">VER CASO</a>
+      </div>
+      <div class="hero-image">
+        <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&auto=format&fit=crop" alt="Caso 1">
+      </div>
+    </section>
+
+    <!-- CASO CURIOSO #2 -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <h2>CASO CURIOSO #2</h2>
+        <p style="margin: 15px 0; line-height: 1.5;">
+          Trazabilidad en tiempo real: Importancia del uso de dispositivos móviles en la preparación de pedidos para evitar retrasos superiores a 24 horas.
+        </p>
+        <a href="detalle-blog2.html" class="btn-secundario">VER CASO</a>
+      </div>
+      <div class="hero-image">
+        <img src="https://images.unsplash.com/photo-1553413077-190dd305871c?w=400&auto=format&fit=crop" alt="Caso 2">
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2026 LogiStock - Evaluación Parcial DSY1104</p>
+  </footer>
+
+  <script src="js/productos.js"></script>
+  <script src="js/validaciones.js"></script>
+</body>
+</html>
