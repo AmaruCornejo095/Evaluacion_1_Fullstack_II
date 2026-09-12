@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle Producto - Mi Tienda</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<header>
+    <div class="logo">MiTienda</div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="productos.html">Productos</a>
+        <a href="nosotros.html">Nosotros</a>
+        <a href="blogs.html">Blogs</a>
+        <a href="contacto.html">Contacto</a>
+    </nav>
+
+    <div class="header-right">
+        <a href="login.html" class="nav-auth">Iniciar Sesión</a>
+        <a href="registro.html" class="nav-auth">Registrarse</a>
+        <a href="carrito.html" class="cart-link">🛒 Cart (<span id="cant-carrito">0</span>)</a>
+    </div>
+</header>
+
+<main class="container">
+    <a href="productos.html" class="btn-secundario">← Volver</a>
+    <div class="card">
+        <img id="foto" src="" alt="">
+        <h2 id="nombre"></h2>
+        <p class="precio" id="precio"></p>
+        <p id="stock"></p>
+        <p id="categoria"></p>
+        <p id="codigo"></p>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2026 LogiStock - Evaluación Parcial DSY1104</p>
+</footer>
+
+<script src="js/productos.js"></script>
+
+</body>
+</html>

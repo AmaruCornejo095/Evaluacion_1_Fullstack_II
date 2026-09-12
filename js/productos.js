@@ -19,7 +19,7 @@ function mostrarProductos(idContenedor, cantidad) {
         <img src="${p.imagen}" alt="${p.nombre}">
         <h3>${p.nombre}</h3>
         <p class="precio">$${p.precio.toLocaleString('es-CL')}</p>
-        <a href="#" class="btn-secundario">Ver Detalle</a>
+        <a href="detalle-producto.html?id=${p.id}" class="btn-secundario">Ver Detalle</a>
       </div>`;
     });
 }
@@ -27,4 +27,23 @@ function mostrarProductos(idContenedor, cantidad) {
 document.addEventListener("DOMContentLoaded", () => {
     mostrarProductos("contenedor-catalogo", listaProductos.length);
     mostrarProductos("contenedor-index", 4);
+    mostrarDetalle();
 });
+
+function mostrarDetalle() {
+    const nombre = document.getElementById("nombre");
+    if (!nombre) return;
+    const id = new URLSearchParams(window.location.search).get("id");
+    const prod = listaProductos.find(p => p.id == id);
+    if (!prod) {
+        nombre.textContent = "Producto no encontrado";
+        return;
+    }
+    document.getElementById("foto").src = prod.imagen;
+    document.getElementById("foto").alt = prod.nombre;
+    nombre.textContent = prod.nombre;
+    document.getElementById("precio").textContent = "$" + prod.precio.toLocaleString('es-CL');
+    document.getElementById("stock").textContent = "Stock: " + prod.stock;
+    document.getElementById("categoria").textContent = prod.categoria;
+    document.getElementById("codigo").textContent = prod.codigo;
+}
