@@ -7,19 +7,21 @@ function validarLogin(event) {
     let errorPassword = document.getElementById("errorPassword");
 
     let esValido = true;
-    errorCorreo.textContent = "";
-    errorPassword.textContent = "";
+    if (errorCorreo) errorCorreo.textContent = "";
+    if (errorPassword) errorPassword.textContent = "";
 
     const dominiosPermitidos = ["@duoc.cl", "@profesor.duoc.cl", "@gmail.com"];
     let dominioValido = dominiosPermitidos.some(domain => correo.endsWith(domain));
 
     if (!correo || correo.length > 100 || !dominioValido) {
-        errorCorreo.textContent = "Correo inválido o dominio no permitido (@duoc.cl, @profesor.duoc.cl, @gmail.com)";
+        if (errorCorreo) errorCorreo.textContent = "Correo inválido o dominio no permitido (@duoc.cl, @profesor.duoc.cl, @gmail.com)";
+        else alert("Correo inválido o dominio no permitido.");
         esValido = false;
     }
 
     if (!password || password.length < 4 || password.length > 10) {
-        errorPassword.textContent = "La contraseña debe tener entre 4 y 10 caracteres";
+        if (errorPassword) errorPassword.textContent = "La contraseña debe tener entre 4 y 10 caracteres";
+        else alert("La contraseña debe tener entre 4 y 10 caracteres.");
         esValido = false;
     }
 
@@ -88,7 +90,6 @@ function validarRegistroUsuario(event) {
 
     alert("Usuario registrado exitosamente.");
 }
-
 
 function obtenerCarrito() {
     return JSON.parse(localStorage.getItem("carrito")) || [];

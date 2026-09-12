@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LogiStock - Tienda y Gestión</title>
+    <title>Detalle Producto - Mi Tienda</title>
     <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
-
 <header>
-    <div class="logo">LogiStock</div>
+    <div class="logo">MiTienda</div>
     <nav>
         <a href="index.html">Home</a>
         <a href="productos.html">Productos</a>
@@ -26,26 +25,15 @@
 </header>
 
 <main class="container">
-
-    <section class="hero-section">
-        <div class="hero-content">
-            <h1>TIENDA ONLINE LOGISTOCK</h1>
-            <p>Catálogo oficial de productos de retail y tecnología almacenados y distribuidos con control de stock en tiempo real.</p>
-            <a href="productos.html" class="btn">Ver Productos</a>
-        </div>
-        <div class="hero-image">
-            <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=500&auto=format&fit=crop" alt="Bodega LogiStock">
-        </div>
-    </section>
-
-    <section class="destacados-section">
-        <h2>Productos Destacados</h2>
-        <div class="grid-cards" id="contenedor-index">
-            <!-- Se llena por JavaScript -->
-        </div>
-        <a href="productos.html" class="btn">Ver todos los productos</a>
-    </section>
-
+    <a href="productos.html" class="btn-secundario">← Volver</a>
+    <div class="card">
+        <img id="foto" src="" alt="">
+        <h2 id="nombre"></h2>
+        <p class="precio" id="precio"></p>
+        <p id="stock"></p>
+        <p id="categoria"></p>
+        <p id="codigo"></p>
+    </div>
 </main>
 
 <footer>
