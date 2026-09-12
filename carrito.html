@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrito de Compras - Mi Tienda</title>
+  <link rel="stylesheet" href="css/estilos.css">
+  <style>
+
+    .tabla-carrito {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    .tabla-carrito th, .tabla-carrito td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+    }
+    .tabla-carrito th {
+      background-color: #2c3e50;
+      color: white;
+    }
+    .resumen-compra {
+      margin-top: 20px;
+      text-align: right;
+      font-size: 1.2rem;
+    }
+    .btn-eliminar {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .btn-vaciar {
+      background-color: #7f8c8d;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+
+  <header>
+    <div class="logo">MiTienda</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="productos.html">Productos</a>
+      <a href="contacto.html">Contacto</a>
+      <a href="login.html">Iniciar Sesión</a>
+      <a href="registro.html">Registrarse</a>
+    </nav>
+    <a href="carrito.html" class="cart-icon">🛒 Carrito (<span id="cant-carrito">0</span>)</a>
+  </header>
+
+  <main class="container">
+    <h2>Tu Carrito de Compras</h2>
+    
+
+      <table class="tabla-carrito">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="lista-carrito">
+          
+      </table>
+
+      <div class="resumen-compra">
+        <p><strong>Total: </strong>$<span id="total-precio">0</span></p>
+        <br>
+        <button class="btn-vaciar" onclick="vaciarCarrito()">Vaciar Carrito</button>
+        <button class="btn" onclick="procesarPago()">Proceder al Pago</button>
+      </div>
+    </div>
+  </main>
+
+
+  <footer>
+    <p>&copy; 2026 MiTienda - Evaluación Parcial 1</p>
+  </footer>
+
+
+  <script src="js/productos.js"></script>
+  <script src="js/validaciones.js"></script>
+  <script>
+   
+    function cargarVistaCarrito() {
+      let carrito = obtenerCarrito();
+      let tbody = document.getElementById("lista-carrito");
+      let totalElemento = document.getElementById("total-precio");
+
+      tbody.innerHTML = "";
+      let total = 0;
+
+      if (carrito.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3">El carrito está vacío. <a href="productos.html">Ver catálogo</a></td></tr>`;
+        totalElemento.textContent = "0";
+        return;
+      }
+
+      carrito.forEach((prod, index) => {
+        total += prod.precio;
+        tbody.innerHTML += `
+          <tr>
+            <td>${prod.nombre}</td>
+            <td>$${prod.precio}</td>
+            <td>
+              <button class="btn-eliminar" onclick="eliminarDelCarrito(${index})">Eliminar</button>
+            </td>
+          </tr>
+        `;
+      });
+
+      totalElemento.textContent = total;
+    }
+
+
+    function eliminarDelCarrito(index) {
+      let carrito = obtenerCarrito();
+      carrito.splice(index, 1);
+      guardarCarrito(carrito);
+      cargarVistaCarrito();
+    }
+
+
+    function vaciarCarrito() {
+      if (confirm("¿Estás seguro de que deseas vaciar el carrito?")) {
+        localStorage.removeItem("carrito");
+        actualizarContadorCarrito();
+        cargarVistaCarrito();
+      }
+    }
+
+ 
+    function procesarPago() {
+      let carrito = obtenerCarrito();
+      if (carrito.length === 0) {
+        alert("Agrega productos antes de realizar la compra.");
+        return;
+      }
+      alert("¡Compra procesada con éxito! Gracias por tu preferencia.");
+      localStorage.removeItem("carrito");
+      actualizarContadorCarrito();
+      cargarVistaCarrito();
+    }
+
+  
+    document.addEventListener("DOMContentLoaded", cargarVistaCarrito);
+  </script>
+</body>
+</html>
