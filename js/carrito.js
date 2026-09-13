@@ -1,304 +1,273 @@
+let carrito = []
+let cupon = ""
 
-const IVA_TASA = 0.19;
-const CUPONES = {
-  DUOC10: 0.10,
-  BIENVENIDA15: 0.15
-};
+let textoCarrito = localStorage.getItem("carrito")
+if (textoCarrito === null) {
+  carrito = []
+} else {
+  carrito = JSON.parse(textoCarrito)
+}
 
-function obtenerCarrito() {
-  let raw = [];
-  try {
-    raw = JSON.parse(localStorage.getItem("carrito")) || [];
-  } catch (e) {
-    raw = [];
-  }
-  if (!Array.isArray(raw)) return [];
+let textoCupon = localStorage.getItem("cupon")
+if (textoCupon === null) {
+  cupon = ""
+} else {
+  cupon = textoCupon
+}
 
+function guardar() {
+  localStorage.setItem("carrito", JSON.stringify(carrito))
+  localStorage.setItem("cupon", cupon)
+  actualizarContadorCarrito()
+}
 
-  const agrupado = {};
-  raw.forEach((item) => {
-    if (!item || item.id == null) return;
-    const id = Number(item.id);
-    if (!agrupado[id]) {
-      agrupado[id] = {
-        id: id,
-        codigo: item.codigo || "",
-        nombre: item.nombre || "Producto",
-        precio: Number(item.precio) || 0,
-        imagen: item.imagen || "",
-        cantidad: 0
-      };
+function buscarEnCatalogo(id) {
+  for (let i = 0; i < listaProductos.length; i++) {
+    if (listaProductos[i].id === id) {
+      return listaProductos[i]
     }
-    agrupado[id].cantidad += Number(item.cantidad) > 0 ? Number(item.cantidad) : 1;
-  });
-  return Object.values(agrupado);
-}
-
-function guardarCarrito(carrito) {
-  localStorage.setItem("carrito", JSON.stringify(carrito));
-  actualizarContadorCarrito();
-}
-
-function obtenerCupon() {
-  return (localStorage.getItem("cupon") || "").trim().toUpperCase();
-}
-
-function guardarCupon(code) {
-  if (!code) {
-    localStorage.removeItem("cupon");
-    return;
   }
-  localStorage.setItem("cupon", code.trim().toUpperCase());
+  return null
 }
 
-function buscarProducto(id) {
-
-  if (typeof listaProductos !== "undefined") {
-    return listaProductos.find((p) => Number(p.id) === Number(id));
+function buscarEnCarrito(id) {
+  for (let i = 0; i < carrito.length; i++) {
+    if (carrito[i].id === id) {
+      return carrito[i]
+    }
   }
-  return null;
+  return null
 }
 
-function agregarAlCarrito(idProducto, cantidadPedida) {
-  const id = Number(idProducto);
-  let qty = Number(cantidadPedida) || 1;
-  if (qty < 1) qty = 1;
-
-  const producto = buscarProducto(id);
-  if (!producto) {
-    alert("Producto no encontrado.");
-    return;
+function agregarAlCarrito(id, cantidad) {
+  let numeroId = parseInt(id)
+  let numeroCantidad = parseInt(cantidad)
+  if (isNaN(numeroCantidad)) {
+    numeroCantidad = 1
   }
-
-  let carrito = obtenerCarrito();
-  const existente = carrito.find((i) => Number(i.id) === id);
-  const enCarrito = existente ? existente.cantidad : 0;
-
-  if (enCarrito + qty > producto.stock) {
-    const disponible = producto.stock - enCarrito;
-    alert(
-      disponible <= 0
-        ? `Sin stock disponible para ${producto.nombre} (stock: ${producto.stock}).`
-        : `Solo puedes agregar ${disponible} más de ${producto.nombre} (stock: ${producto.stock}).`
-    );
-    return;
+  if (numeroCantidad < 1) {
+    numeroCantidad = 1
   }
-
-  if (existente) {
-    existente.cantidad += qty;
+  let producto = buscarEnCatalogo(numeroId)
+  if (producto === null) {
+    alert("Producto no encontrado")
+    return
+  }
+  let item = buscarEnCarrito(numeroId)
+  let cantidadActual = 0
+  if (item !== null) {
+    cantidadActual = item.cantidad
+  }
+  if (cantidadActual + numeroCantidad > producto.stock) {
+    alert("No hay stock suficiente, stock disponible: " + producto.stock)
+    return
+  }
+  if (item !== null) {
+    item.cantidad = item.cantidad + numeroCantidad
   } else {
     carrito.push({
       id: producto.id,
-      codigo: producto.codigo,
       nombre: producto.nombre,
       precio: producto.precio,
-      imagen: producto.imagen,
-      cantidad: qty
-    });
+      cantidad: numeroCantidad
+    })
   }
-
-  guardarCarrito(carrito);
-  alert(`${producto.nombre} añadido al carrito (cantidad: ${qty})`);
-
-  if (typeof cargarVistaCarrito === "function" && document.getElementById("lista-carrito")) {
-    cargarVistaCarrito();
-  }
+  guardar()
+  alert(producto.nombre + " agregado al carrito")
+  cargarVistaCarrito()
 }
 
-function cambiarCantidad(idProducto, delta) {
-  const id = Number(idProducto);
-  let carrito = obtenerCarrito();
-  const item = carrito.find((i) => Number(i.id) === id);
-  if (!item) return;
-
-  const producto = buscarProducto(id);
-  const stock = producto ? producto.stock : 99;
-
-  const nueva = item.cantidad + Number(delta);
-  if (nueva < 1) {
-    eliminarDelCarrito(id);
-    return;
+function cambiarCantidad(id, cambio) {
+  let numeroId = parseInt(id)
+  let numeroCambio = parseInt(cambio)
+  let item = buscarEnCarrito(numeroId)
+  if (item === null) {
+    return
   }
-  if (nueva > stock) {
-    alert(`Stock máximo disponible: ${stock}.`);
-    return;
+  let producto = buscarEnCatalogo(numeroId)
+  let stock = producto.stock
+  let nuevaCantidad = item.cantidad + numeroCambio
+  if (nuevaCantidad < 1) {
+    eliminarDelCarrito(numeroId)
+    return
   }
-  item.cantidad = nueva;
-  guardarCarrito(carrito);
-  cargarVistaCarrito();
+  if (nuevaCantidad > stock) {
+    alert("Stock maximo disponible: " + stock)
+    return
+  }
+  item.cantidad = nuevaCantidad
+  guardar()
+  cargarVistaCarrito()
 }
 
-function setCantidad(idProducto, valor) {
-  const id = Number(idProducto);
-  let qty = parseInt(valor, 10);
-  if (isNaN(qty) || qty < 1) qty = 1;
-
-  let carrito = obtenerCarrito();
-  const item = carrito.find((i) => Number(i.id) === id);
-  if (!item) return;
-
-  const producto = buscarProducto(id);
-  const stock = producto ? producto.stock : 99;
-  if (qty > stock) {
-    alert(`Stock máximo disponible: ${stock}.`);
-    qty = stock;
+function setCantidad(id, valor) {
+  let numeroId = parseInt(id)
+  let nuevaCantidad = parseInt(valor)
+  if (isNaN(nuevaCantidad)) {
+    nuevaCantidad = 1
   }
-  item.cantidad = qty;
-  guardarCarrito(carrito);
-  cargarVistaCarrito();
+  if (nuevaCantidad < 1) {
+    nuevaCantidad = 1
+  }
+  let item = buscarEnCarrito(numeroId)
+  if (item === null) {
+    return
+  }
+  let producto = buscarEnCatalogo(numeroId)
+  let stock = producto.stock
+  if (nuevaCantidad > stock) {
+    alert("Stock maximo disponible: " + stock)
+    nuevaCantidad = stock
+  }
+  item.cantidad = nuevaCantidad
+  guardar()
+  cargarVistaCarrito()
 }
 
-function eliminarDelCarrito(idProducto) {
-  const id = Number(idProducto);
-  let carrito = obtenerCarrito().filter((i) => Number(i.id) !== id);
-  guardarCarrito(carrito);
-  if (document.getElementById("lista-carrito")) cargarVistaCarrito();
+function eliminarDelCarrito(id) {
+  let numeroId = parseInt(id)
+  let nuevoCarrito = []
+  for (let i = 0; i < carrito.length; i++) {
+    if (carrito[i].id !== numeroId) {
+      nuevoCarrito.push(carrito[i])
+    }
+  }
+  carrito = nuevoCarrito
+  guardar()
+  cargarVistaCarrito()
 }
 
 function vaciarCarrito() {
-  if (!confirm("¿Estás seguro de que deseas vaciar el carrito?")) return;
-  localStorage.removeItem("carrito");
-  actualizarContadorCarrito();
-  if (document.getElementById("lista-carrito")) cargarVistaCarrito();
+  let confirma = confirm("Vas a vaciar el carrito, quieres continuar?")
+  if (confirma === false) {
+    return
+  }
+  carrito = []
+  guardar()
+  cargarVistaCarrito()
 }
 
-function aplicarCupon(code) {
-  const input = document.getElementById("input-cupon");
-  const raw = (code !== undefined ? code : input ? input.value : "").trim().toUpperCase();
-  const msg = document.getElementById("cupon-msg");
-
-  if (!raw) {
-    guardarCupon("");
-    if (msg) {
-      msg.textContent = "";
-    }
-    cargarVistaCarrito();
-    return;
+function aplicarCupon() {
+  let input = document.getElementById("input-cupon")
+  let texto = input.value
+  texto = texto.trim()
+  texto = texto.toUpperCase()
+  if (texto === "") {
+    cupon = ""
+    guardar()
+    cargarVistaCarrito()
+    return
   }
-
-  if (!CUPONES[raw]) {
-    if (msg) msg.textContent = "Cupón inválido. Prueba con DUOC10.";
-    alert("Cupón inválido. Prueba con DUOC10.");
-    return;
+  if (texto !== "DUOC10") {
+    alert("Cupon invalido, prueba con DUOC10")
+    return
   }
-
-  guardarCupon(raw);
-  if (msg) msg.textContent = `Cupón ${raw} aplicado (${CUPONES[raw] * 100}% dcto).`;
-  cargarVistaCarrito();
+  cupon = texto
+  guardar()
+  cargarVistaCarrito()
 }
 
 function quitarCupon() {
-  guardarCupon("");
-  cargarVistaCarrito();
-}
-
-function calcularTotales(carrito, cuponCode) {
-  const items = carrito || [];
-  const subtotalBruto = items.reduce((acc, i) => acc + Number(i.precio) * Number(i.cantidad), 0);
-  const code = (cuponCode !== undefined ? cuponCode : obtenerCupon()).trim().toUpperCase();
-  const pct = CUPONES[code] || 0;
-  const descuento = Math.round(subtotalBruto * pct);
-  const totalAPagar = subtotalBruto - descuento;
-  const neto = Math.round(totalAPagar / (1 + IVA_TASA));
-  const iva = totalAPagar - neto;
-  return { subtotalBruto, pct, code, descuento, totalAPagar, neto, iva };
+  cupon = ""
+  guardar()
+  cargarVistaCarrito()
 }
 
 function actualizarContadorCarrito() {
-  const totalUnidades = obtenerCarrito().reduce((acc, i) => acc + Number(i.cantidad), 0);
-  document.querySelectorAll("#cant-carrito").forEach((el) => {
-    el.textContent = totalUnidades;
-  });
-}
-
-function formatoCL(n) {
-  return Number(n || 0).toLocaleString("es-CL");
+  let totalUnidades = 0
+  for (let i = 0; i < carrito.length; i++) {
+    totalUnidades = totalUnidades + carrito[i].cantidad
+  }
+  let elementos = document.querySelectorAll("#cant-carrito")
+  for (let j = 0; j < elementos.length; j++) {
+    elementos[j].textContent = totalUnidades
+  }
 }
 
 function cargarVistaCarrito() {
-  const tbody = document.getElementById("lista-carrito");
-  if (!tbody) return;
-
-  const carrito = obtenerCarrito();
-  const t = calcularTotales(carrito);
-
-
-  const input = document.getElementById("input-cupon");
-  if (input && document.activeElement !== input) input.value = obtenerCupon();
-  const msg = document.getElementById("cupon-msg");
-  if (msg && t.pct > 0) msg.textContent = `Cupón ${t.code} aplicado (${t.pct * 100}% dcto).`;
-
-  tbody.innerHTML = "";
-
-  if (carrito.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5">El carrito está vacío. <a href="productos.html">Ver catálogo</a></td></tr>`;
-    actualizarResumen(t);
-    return;
+  let tbody = document.getElementById("lista-carrito")
+  if (tbody === null) {
+    return
   }
-
-  carrito.forEach((item) => {
-    const sublinea = Number(item.precio) * Number(item.cantidad);
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${item.nombre}</td>
-      <td>$${formatoCL(item.precio)}</td>
-      <td>
-        <button class="btn-cant" onclick="cambiarCantidad(${item.id}, -1)">−</button>
-        <input type="number" min="1" value="${item.cantidad}" style="width:55px;text-align:center"
-          onchange="setCantidad(${item.id}, this.value)">
-        <button class="btn-cant" onclick="cambiarCantidad(${item.id}, 1)">+</button>
-      </td>
-      <td>$${formatoCL(sublinea)}</td>
-      <td><button class="btn-eliminar" onclick="eliminarDelCarrito(${item.id})">Eliminar</button></td>
-    `;
-    tbody.appendChild(tr);
-  });
-
-  actualizarResumen(t);
-}
-
-function actualizarResumen(t) {
-  const set = (id, val) => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = formatoCL(val);
-  };
-  set("res-subtotal", t.subtotalBruto);
-  set("res-descuento", t.descuento);
-  set("res-total", t.totalAPagar);
-  set("res-neto", t.neto);
-  set("res-iva", t.iva);
-
-
-  const legacy = document.getElementById("total-precio");
-  if (legacy) legacy.textContent = formatoCL(t.totalAPagar);
-
-  const rowDesc = document.getElementById("fila-descuento");
-  if (rowDesc) rowDesc.style.display = t.descuento > 0 ? "" : "none";
-
-  const btnQuitar = document.getElementById("btn-quitar-cupon");
-  if (btnQuitar) btnQuitar.style.display = t.pct > 0 ? "" : "none";
+  let subtotal = 0
+  for (let i = 0; i < carrito.length; i++) {
+    subtotal = subtotal + carrito[i].precio * carrito[i].cantidad
+  }
+  let descuento = 0
+  if (cupon === "DUOC10") {
+    descuento = Math.round(subtotal * 0.1)
+  }
+  let total = subtotal - descuento
+  let neto = Math.round(total / 1.19)
+  let iva = total - neto
+  let input = document.getElementById("input-cupon")
+  if (input !== null) {
+    input.value = cupon
+  }
+  let mensaje = document.getElementById("cupon-msg")
+  if (mensaje !== null) {
+    if (cupon === "DUOC10") {
+      mensaje.textContent = "Cupon DUOC10 aplicado, 10% de descuento"
+    } else {
+      mensaje.textContent = ""
+    }
+  }
+  tbody.innerHTML = ""
+  if (carrito.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5">El carrito esta vacio. <a href="productos.html">Ver catalogo</a></td></tr>'
+  } else {
+    for (let i = 0; i < carrito.length; i++) {
+      let item = carrito[i]
+      let sublinea = item.precio * item.cantidad
+      let fila = document.createElement("tr")
+      fila.innerHTML = "<td>" + item.nombre + "</td><td>$" + item.precio.toLocaleString("es-CL") + "</td><td>" + '<button class="btn-cant" onclick="cambiarCantidad(' + item.id + ", -1)" + '">-</button>' + '<input type="number" min="1" value="' + item.cantidad + '" style="width:55px;text-align:center" onchange="setCantidad(' + item.id + ', this.value)">' + '<button class="btn-cant" onclick="cambiarCantidad(' + item.id + ", 1)" + '">+</button>' + "</td><td>$" + sublinea.toLocaleString("es-CL") + "</td>" + '<td><button class="btn-eliminar" onclick="eliminarDelCarrito(' + item.id + ')">Eliminar</button></td>'
+      tbody.appendChild(fila)
+    }
+  }
+  document.getElementById("res-subtotal").textContent = subtotal.toLocaleString("es-CL")
+  document.getElementById("res-descuento").textContent = descuento.toLocaleString("es-CL")
+  document.getElementById("res-total").textContent = total.toLocaleString("es-CL")
+  document.getElementById("res-neto").textContent = neto.toLocaleString("es-CL")
+  document.getElementById("res-iva").textContent = iva.toLocaleString("es-CL")
+  document.getElementById("total-precio").textContent = total.toLocaleString("es-CL")
+  let filaDescuento = document.getElementById("fila-descuento")
+  if (descuento > 0) {
+    filaDescuento.style.display = ""
+  } else {
+    filaDescuento.style.display = "none"
+  }
+  let botonQuitar = document.getElementById("btn-quitar-cupon")
+  if (cupon === "DUOC10") {
+    botonQuitar.style.display = ""
+  } else {
+    botonQuitar.style.display = "none"
+  }
 }
 
 function procesarPago() {
-  const carrito = obtenerCarrito();
   if (carrito.length === 0) {
-    alert("Agrega productos antes de realizar la compra.");
-    return;
+    alert("Agrega productos antes de realizar la compra")
+    return
   }
-  const t = calcularTotales(carrito);
-  alert(
-    `¡Compra procesada con éxito!\n\n` +
-    `Subtotal: $${formatoCL(t.subtotalBruto)}\n` +
-    (t.descuento > 0 ? `Descuento ${t.code}: -$${formatoCL(t.descuento)}\n` : "") +
-    `Total pagado: $${formatoCL(t.totalAPagar)} (Neto $${formatoCL(t.neto)} + IVA $${formatoCL(t.iva)})\n\n` +
-    `Gracias por tu preferencia.`
-  );
-  localStorage.removeItem("carrito");
-  actualizarContadorCarrito();
-  cargarVistaCarrito();
+  let subtotal = 0
+  for (let i = 0; i < carrito.length; i++) {
+    subtotal = subtotal + carrito[i].precio * carrito[i].cantidad
+  }
+  let descuento = 0
+  if (cupon === "DUOC10") {
+    descuento = Math.round(subtotal * 0.1)
+  }
+  let total = subtotal - descuento
+  let neto = Math.round(total / 1.19)
+  let iva = total - neto
+  alert("Compra realizada, total pagado $" + total.toLocaleString("es-CL") + ", neto $" + neto.toLocaleString("es-CL") + ", IVA $" + iva.toLocaleString("es-CL"))
+  carrito = []
+  cupon = ""
+  guardar()
+  cargarVistaCarrito()
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  actualizarContadorCarrito();
-  if (document.getElementById("lista-carrito")) cargarVistaCarrito();
-});
+document.addEventListener("DOMContentLoaded", function() {
+  actualizarContadorCarrito()
+  cargarVistaCarrito()
+})
