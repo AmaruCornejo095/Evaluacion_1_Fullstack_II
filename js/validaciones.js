@@ -91,32 +91,5 @@ function validarRegistroUsuario(event) {
     alert("Usuario registrado exitosamente.");
 }
 
-function obtenerCarrito() {
-    return JSON.parse(localStorage.getItem("carrito")) || [];
-}
-
-function guardarCarrito(carrito) {
-    localStorage.setItem("carrito", JSON.stringify(carrito));
-    actualizarContadorCarrito();
-}
-
-function agregarAlCarrito(idProducto) {
-    let carrito = obtenerCarrito();
-    let producto = listaProductos.find(p => p.id === idProducto);
-
-    if (producto) {
-        carrito.push(producto);
-        guardarCarrito(carrito);
-        alert(`${producto.nombre} añadido al carrito`);
-    }
-}
-
-function actualizarContadorCarrito() {
-    let carrito = obtenerCarrito();
-    let contador = document.getElementById("cant-carrito");
-    if (contador) {
-        contador.textContent = carrito.length;
-    }
-}
-
-document.addEventListener("DOMContentLoaded", actualizarContadorCarrito);
+// Lógica del carrito movida a js/carrito.js para soportar
+// cantidades, IVA incluido y cupones. No duplicar aquí.

@@ -19,7 +19,9 @@ function mostrarProductos(idContenedor, cantidad) {
         <img src="${p.imagen}" alt="${p.nombre}">
         <h3>${p.nombre}</h3>
         <p class="precio">$${p.precio.toLocaleString('es-CL')}</p>
+        <p style="font-size:0.85rem;color:#64748b">Stock: ${p.stock}</p>
         <a href="detalle-producto.html?id=${p.id}" class="btn-secundario">Ver Detalle</a>
+        <button class="btn" onclick="agregarAlCarrito(${p.id})">Agregar al carrito</button>
       </div>`;
     });
 }
@@ -46,4 +48,26 @@ function mostrarDetalle() {
     document.getElementById("stock").textContent = "Stock: " + prod.stock;
     document.getElementById("categoria").textContent = prod.categoria;
     document.getElementById("codigo").textContent = prod.codigo;
+
+    // Botón agregar + selector cantidad en detalle (se crea solo una vez)
+    if (!document.getElementById("btn-agregar-detalle")) {
+        const wrap = document.createElement("div");
+        wrap.style.marginTop = "12px";
+        wrap.innerHTML = `
+          <label for="cant-detalle" style="font-weight:600">Cantidad:</label>
+          <input id="cant-detalle" type="number" min="1" value="1" style="width:70px;padding:6px;margin:0 8px">
+          <button id="btn-agregar-detalle" class="btn">Agregar al carrito</button>`;
+        nombre.closest(".card").appendChild(wrap);
+        wrap.querySelector("#btn-agregar-detalle").addEventListener("click", () => {
+            const qty = parseInt(wrap.querySelector("#cant-detalle").value, 10) || 1;
+            agregarAlCarrito(prod.id, qty);
+        });
+    } else {
+        // Si ya existe (navegación), reasociar al producto actual
+        const btn = document.getElementById("btn-agregar-detalle");
+        btn.onclick = () => {
+            const qty = parseInt(document.getElementById("cant-detalle").value, 10) || 1;
+            agregarAlCarrito(prod.id, qty);
+        };
+    }
 }

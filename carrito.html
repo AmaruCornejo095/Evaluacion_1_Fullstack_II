@@ -21,10 +21,43 @@
       background-color: #2c3e50;
       color: white;
     }
+    .btn-cant {
+      background-color: #e2e8f0;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-weight: bold;
+    }
     .resumen-compra {
       margin-top: 20px;
       text-align: right;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
+      max-width: 420px;
+      margin-left: auto;
+    }
+    .resumen-compra .fila {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+    }
+    .resumen-compra .total-final {
+      font-size: 1.3rem;
+      border-top: 2px solid #2c3e50;
+      margin-top: 8px;
+      padding-top: 8px;
+    }
+    .cupon-box {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      margin: 12px 0;
+    }
+    .cupon-box input {
+      padding: 8px;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      text-transform: uppercase;
     }
     .btn-eliminar {
       background-color: #e74c3c;
@@ -67,16 +100,30 @@
         <thead>
           <tr>
             <th>Producto</th>
-            <th>Precio</th>
+            <th>Precio Unit.</th>
+            <th>Cantidad</th>
+            <th>Subtotal</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody id="lista-carrito">
-          
+
       </table>
 
       <div class="resumen-compra">
-        <p><strong>Total: </strong>$<span id="total-precio">0</span></p>
+        <div class="cupon-box">
+          <input id="input-cupon" placeholder="Cupón ej: DUOC10" maxlength="20">
+          <button class="btn-secundario" onclick="aplicarCupon()">Aplicar</button>
+          <button class="btn-secundario" id="btn-quitar-cupon" onclick="quitarCupon()" style="display:none">Quitar</button>
+        </div>
+        <p id="cupon-msg" style="font-size:0.9rem;color:#15803d;min-height:1.2em"></p>
+        <div class="fila"><span>Subtotal (bruto):</span><span>$<span id="res-subtotal">0</span></span></div>
+        <div class="fila" id="fila-descuento"><span>Descuento:</span><span>-$<span id="res-descuento">0</span></span></div>
+        <div class="fila"><span>Neto:</span><span>$<span id="res-neto">0</span></span></div>
+        <div class="fila"><span>IVA 19% (incluido):</span><span>$<span id="res-iva">0</span></span></div>
+        <div class="fila total-final"><strong>Total a pagar:</strong><strong>$<span id="res-total">0</span></strong></div>
+        <!-- Compatibilidad: total antiguo -->
+        <span id="total-precio" style="display:none">0</span>
         <br>
         <button class="btn-vaciar" onclick="vaciarCarrito()">Vaciar Carrito</button>
         <button class="btn" onclick="procesarPago()">Proceder al Pago</button>
@@ -91,71 +138,6 @@
 
 
   <script src="js/productos.js"></script>
-  <script src="js/validaciones.js"></script>
-  <script>
-   
-    function cargarVistaCarrito() {
-      let carrito = obtenerCarrito();
-      let tbody = document.getElementById("lista-carrito");
-      let totalElemento = document.getElementById("total-precio");
-
-      tbody.innerHTML = "";
-      let total = 0;
-
-      if (carrito.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="3">El carrito está vacío. <a href="productos.html">Ver catálogo</a></td></tr>`;
-        totalElemento.textContent = "0";
-        return;
-      }
-
-      carrito.forEach((prod, index) => {
-        total += prod.precio;
-        tbody.innerHTML += `
-          <tr>
-            <td>${prod.nombre}</td>
-            <td>$${prod.precio}</td>
-            <td>
-              <button class="btn-eliminar" onclick="eliminarDelCarrito(${index})">Eliminar</button>
-            </td>
-          </tr>
-        `;
-      });
-
-      totalElemento.textContent = total;
-    }
-
-
-    function eliminarDelCarrito(index) {
-      let carrito = obtenerCarrito();
-      carrito.splice(index, 1);
-      guardarCarrito(carrito);
-      cargarVistaCarrito();
-    }
-
-
-    function vaciarCarrito() {
-      if (confirm("¿Estás seguro de que deseas vaciar el carrito?")) {
-        localStorage.removeItem("carrito");
-        actualizarContadorCarrito();
-        cargarVistaCarrito();
-      }
-    }
-
- 
-    function procesarPago() {
-      let carrito = obtenerCarrito();
-      if (carrito.length === 0) {
-        alert("Agrega productos antes de realizar la compra.");
-        return;
-      }
-      alert("¡Compra procesada con éxito! Gracias por tu preferencia.");
-      localStorage.removeItem("carrito");
-      actualizarContadorCarrito();
-      cargarVistaCarrito();
-    }
-
-  
-    document.addEventListener("DOMContentLoaded", cargarVistaCarrito);
-  </script>
+  <script src="js/carrito.js"></script>
 </body>
 </html>
