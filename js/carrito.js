@@ -1,5 +1,4 @@
 
-
 const IVA_TASA = 0.19;
 const CUPONES = {
   DUOC10: 0.10,
@@ -14,6 +13,7 @@ function obtenerCarrito() {
     raw = [];
   }
   if (!Array.isArray(raw)) return [];
+
 
   const agrupado = {};
   raw.forEach((item) => {
@@ -221,6 +221,7 @@ function cargarVistaCarrito() {
 
   const carrito = obtenerCarrito();
   const t = calcularTotales(carrito);
+
 
   const input = document.getElementById("input-cupon");
   if (input && document.activeElement !== input) input.value = obtenerCupon();
