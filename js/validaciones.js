@@ -1,3 +1,55 @@
+const ADMIN_EMAIL = "admin@duoc.cl";
+
+function leerUsuarios() {
+    let texto = localStorage.getItem("usuarios");
+    if (!texto) return [];
+    try {
+        let lista = JSON.parse(texto);
+        if (Array.isArray(lista)) return lista;
+        return [];
+    } catch (e) {
+        return [];
+    }
+}
+
+function guardarUsuarios(lista) {
+    localStorage.setItem("usuarios", JSON.stringify(lista));
+}
+
+function guardarSesion(sesion) {
+    localStorage.setItem("sesion", JSON.stringify(sesion));
+}
+
+function obtenerSesion() {
+    let texto = localStorage.getItem("sesion");
+    if (!texto) return null;
+    try {
+        return JSON.parse(texto);
+    } catch (e) {
+        return null;
+    }
+}
+
+function cerrarSesion() {
+    localStorage.removeItem("sesion");
+    window.location.href = "index.html";
+}
+
+function protegerPagina(rolEsperado) {
+    let sesion = obtenerSesion();
+    if (!sesion) {
+        window.location.href = "login.html";
+        return;
+    }
+    if (rolEsperado && sesion.rol !== rolEsperado) {
+        if (sesion.rol === "admin") window.location.href = "admin-home.html";
+        else window.location.href = "cliente-home.html";
+        return;
+    }
+    let nombreSesion = document.getElementById("nombre-sesion");
+    if (nombreSesion) nombreSesion.textContent = sesion.nombre;
+}
+
 function validarLogin(event) {
     event.preventDefault();
 
@@ -25,8 +77,34 @@ function validarLogin(event) {
         esValido = false;
     }
 
-    if (esValido) {
+    if (!esValido) return;
+
+    let usuarios = leerUsuarios();
+    let usuario = null;
+    for (let i = 0; i < usuarios.length; i++) {
+        if (usuarios[i].correo === correo) usuario = usuarios[i];
+    }
+
+    if (!usuario) {
+        if (errorCorreo) errorCorreo.textContent = "Correo no registrado. Regístrate primero.";
+        else alert("Correo no registrado. Regístrate primero.");
+        return;
+    }
+
+    if (usuario.password !== password) {
+        if (errorPassword) errorPassword.textContent = "Contraseña incorrecta.";
+        else alert("Contraseña incorrecta.");
+        return;
+    }
+
+    guardarSesion({ correo: usuario.correo, nombre: usuario.nombre, rol: usuario.rol });
+
+    if (usuario.rol === "admin") {
+        alert("¡Bienvenido Administrador!");
+        window.location.href = "admin-home.html";
+    } else {
         alert("¡Inicio de sesión exitoso!");
+        window.location.href = "cliente-home.html";
     }
 }
 
@@ -126,7 +204,27 @@ function validarRegistroUsuario(event) {
         esValido = false;
     }
 
-    if (esValido) {
+    if (!esValido) return;
+
+    let usuarios = leerUsuarios();
+    for (let i = 0; i < usuarios.length; i++) {
+        if (usuarios[i].correo === correo) {
+            if (errorCorreo) errorCorreo.textContent = "Este correo ya está registrado.";
+            else alert("Este correo ya está registrado.");
+            return;
+        }
+    }
+
+    let rol = correo === ADMIN_EMAIL ? "admin" : "cliente";
+    usuarios.push({ run: run, nombre: nombre, apellidos: apellidos, correo: correo, password: password, rol: rol });
+    guardarUsuarios(usuarios);
+    guardarSesion({ correo: correo, nombre: nombre, rol: rol });
+
+    if (rol === "admin") {
+        alert("Administrador registrado exitosamente.");
+        window.location.href = "admin-home.html";
+    } else {
         alert("Usuario registrado exitosamente.");
+        window.location.href = "cliente-home.html";
     }
 }

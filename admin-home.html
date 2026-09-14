@@ -3,17 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portal Cliente - LogiStock</title>
+  <title>Portal Administrador - LogiStock</title>
   <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
 
-
   <header>
-    <div class="logo">LogiStock (Cliente)</div>
+    <div class="logo">LogiStock (Admin)</div>
     <nav>
-      <a href="index.html">Inicio</a>
-      <a href="productos.html">Mis Productos</a>
+      <a href="admin-home.html">Inicio</a>
+      <a href="productos.html">Productos</a>
       <a href="contacto.html">Soporte</a>
     </nav>
     <div class="header-right">
@@ -23,27 +22,32 @@
   </header>
 
   <main class="container">
-    <h2>Bienvenido, <span id="nombre-sesion">Cliente</span></h2>
-    <p>Consulte el estado de su inventario en tiempo real y gestione nuevas solicitudes.</p>
-    
+    <h2>Bienvenido, <span id="nombre-sesion">Administrador</span></h2>
+    <p>Gestiona el inventario, revisa el stock y controla las solicitudes de clientes.</p>
+
     <div class="grid-cards" style="margin-top: 20px;">
       <div class="card">
-        <h3>Consultar Stock</h3>
+        <h3>Ver Stock</h3>
         <p class="categoria-tag">Revisar productos almacenados</p>
-        <a href="productos.html" class="btn" style="margin-top: 10px;">Ver Catálogo</a>
+        <a href="productos.html" class="btn" style="margin-top: 10px;">Ir a Productos</a>
+      </div>
+      <div class="card">
+        <h3>Ver Pedidos</h3>
+        <p class="categoria-tag">Revisar carritos y solicitudes</p>
+        <a href="carrito.html" class="btn" style="margin-top: 10px;">Ir a Pedidos</a>
       </div>
     </div>
   </main>
 
   <footer>
-    <p>&copy; 2026 LogiStock - Vista Cliente</p>
+    <p>&copy; 2026 LogiStock - Vista Administrador</p>
   </footer>
 
 <script src="js/productos.js"></script>
 <script src="js/carrito.js"></script>
 <script src="js/validaciones.js"></script>
 <script>
-  protegerPagina("cliente");
+  protegerPagina("admin");
 </script>
 
 </body>
