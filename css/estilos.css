@@ -62,6 +62,75 @@ nav a:hover, .nav-auth:hover {
     white-space: nowrap;
 }
 
+.tabla-carrito {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+.tabla-carrito th, .tabla-carrito td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+.tabla-carrito th {
+    background-color: #2c3e50;
+    color: white;
+}
+.btn-cant {
+    background-color: #e2e8f0;
+    border: none;
+    padding: 4px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.resumen-compra {
+    margin-top: 20px;
+    text-align: right;
+    font-size: 1.1rem;
+    max-width: 420px;
+    margin-left: auto;
+}
+.resumen-compra .fila {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+}
+.resumen-compra .total-final {
+    font-size: 1.3rem;
+    border-top: 2px solid #2c3e50;
+    margin-top: 8px;
+    padding-top: 8px;
+}
+.cupon-box {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin: 12px 0;
+}
+.cupon-box input {
+    padding: 8px;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+.btn-eliminar {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.btn-vaciar {
+    background-color: #7f8c8d;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
 .container {
     max-width: 1100px;
     width: 100%;
@@ -199,6 +268,23 @@ nav a:hover, .nav-auth:hover {
     font-size: 1rem;
     cursor: pointer;
     margin-top: 5px;
+}
+
+.form-link {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.form-link a {
+    color: #0284c7;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.form-link a:hover {
+    text-decoration: underline;
 }
 
 footer {

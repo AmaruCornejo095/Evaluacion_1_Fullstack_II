@@ -5,80 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Carrito de Compras - Mi Tienda</title>
   <link rel="stylesheet" href="css/estilos.css">
-  <style>
-
-    .tabla-carrito {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    .tabla-carrito th, .tabla-carrito td {
-      border: 1px solid #ddd;
-      padding: 12px;
-      text-align: center;
-    }
-    .tabla-carrito th {
-      background-color: #2c3e50;
-      color: white;
-    }
-    .btn-cant {
-      background-color: #e2e8f0;
-      border: none;
-      padding: 4px 10px;
-      border-radius: 3px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .resumen-compra {
-      margin-top: 20px;
-      text-align: right;
-      font-size: 1.1rem;
-      max-width: 420px;
-      margin-left: auto;
-    }
-    .resumen-compra .fila {
-      display: flex;
-      justify-content: space-between;
-      padding: 4px 0;
-    }
-    .resumen-compra .total-final {
-      font-size: 1.3rem;
-      border-top: 2px solid #2c3e50;
-      margin-top: 8px;
-      padding-top: 8px;
-    }
-    .cupon-box {
-      display: flex;
-      gap: 8px;
-      justify-content: flex-end;
-      margin: 12px 0;
-    }
-    .cupon-box input {
-      padding: 8px;
-      border: 1px solid #cbd5e1;
-      border-radius: 4px;
-      text-transform: uppercase;
-    }
-    .btn-eliminar {
-      background-color: #e74c3c;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 3px;
-      cursor: pointer;
-    }
-    .btn-vaciar {
-      background-color: #7f8c8d;
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-  </style>
 </head>
 <body>
-
 
   <header>
     <div class="logo">LogiStock</div>
@@ -127,7 +55,6 @@
         <div class="fila"><span>Neto:</span><span>$<span id="res-neto">0</span></span></div>
         <div class="fila"><span>IVA 19% (incluido):</span><span>$<span id="res-iva">0</span></span></div>
         <div class="fila total-final"><strong>Total a pagar:</strong><strong>$<span id="res-total">0</span></strong></div>
-        <!-- Compatibilidad: total antiguo -->
         <span id="total-precio" style="display:none">0</span>
         <br>
         <button class="btn-vaciar" onclick="vaciarCarrito()">Vaciar Carrito</button>
@@ -135,7 +62,6 @@
       </div>
     </div>
   </main>
-
 
   <footer>
     <p>&copy; 2026 LogiStock - Evaluación Parcial 1</p>
